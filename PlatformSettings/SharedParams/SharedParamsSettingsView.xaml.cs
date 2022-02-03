@@ -84,12 +84,7 @@ namespace PlatformSettings.SharedParams {
         }
 
         private void SelectConfigFile(object p) {
-            using(var dialog = new System.Windows.Forms.FolderBrowserDialog()) {
-                dialog.SelectedPath = System.IO.Path.GetDirectoryName(Path);
-                if(dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                    Path = System.IO.Path.Combine(dialog.SelectedPath, _revitParams.ConfigFileName);
-                }
-            }
+            
         }
 
         #region INotifyPropertyChanged
