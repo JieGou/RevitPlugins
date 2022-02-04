@@ -18,7 +18,8 @@ namespace PlatformSettings.TabExtensions {
 
         /// <inheritdoc/>
         public override List<string> Url { get; } = new List<string>() {
-            System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"pyRevit\Extensions\01.BIM.extension\extensions.json")
+            System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"pyRevit\Extensions\01.BIM.extension\extensions.json"),
+            dosymep.Bim4Everyone.PlatformProfiles.PlatformProfiles.Instance.ExtensionsPath,
         };
 
         /// <inheritdoc/>
