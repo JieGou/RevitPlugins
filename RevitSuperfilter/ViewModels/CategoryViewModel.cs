@@ -64,7 +64,7 @@ namespace RevitSuperfilter.ViewModels {
         }
 
         public override string DisplayData {
-            get => Category?.Name ?? "Без категории";
+            get => Category?.Name ?? "未分类";
         }
 
         public int Count {

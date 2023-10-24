@@ -18,12 +18,12 @@ namespace dosymep.Bim4Everyone {
         public bool FromGui { get; set; } = true;
 
         /// <summary>
-        /// Предоставляет доступ к логгеру расширения.
+        /// Provides access to the extension logger.
         /// </summary>
         protected ILoggerService PluginLoggerService { get; private set; }
 
         /// <summary>
-        /// Предоставляет доступ к логгеру платформы.
+        /// Provides access to the platform logger.
         /// </summary>
         protected ILoggerService LoggerService => GetPlatformService<ILoggerService>();
 
@@ -32,7 +32,7 @@ namespace dosymep.Bim4Everyone {
             FromGui = GetFromGui(commandData.JournalData);
             
             PluginLoggerService = LoggerService.ForPluginContext(PluginName);
-            PluginLoggerService.Information("Запуск команды расширения.");
+            PluginLoggerService.Information("Running the extension command.");
 
             AppDomain.CurrentDomain.AssemblyResolve += AppDomainExtensions.CurrentDomain_AssemblyResolve;
             try {
@@ -59,7 +59,7 @@ namespace dosymep.Bim4Everyone {
                     .CreateWarningNotification(PluginName, "Выполнение скрипта отменено.")
                     .ShowAsync();
             } catch(Exception ex) {
-                PluginLoggerService.Warning(ex, "Ошибка в команде расширения.");
+                PluginLoggerService.Warning(ex, "Error in extension command.");
                 
                 if(!FromGui) {
                     message = ex.Message;
@@ -95,7 +95,7 @@ namespace dosymep.Bim4Everyone {
         protected string PluginName { get; set; }
 
         /// <summary>
-        /// Метод команды Revit
+        /// Revit command method
         /// </summary>
         /// <param name="uiApplication">Приложение Revit.</param>
         protected abstract void Execute(UIApplication uiApplication);

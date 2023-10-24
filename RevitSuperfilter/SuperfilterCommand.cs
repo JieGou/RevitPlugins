@@ -21,7 +21,7 @@ namespace RevitSuperfilter {
     [Transaction(TransactionMode.Manual)]
     public class SuperfilterCommand : BasePluginCommand {
         public SuperfilterCommand() {
-            PluginName = "Суперфильтр";
+            PluginName = "Superfilter";
         }
 
         protected override void Execute(UIApplication uiApplication) {
