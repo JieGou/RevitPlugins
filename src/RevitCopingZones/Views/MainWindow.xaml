@@ -1,0 +1,171 @@
+﻿<base:ThemedPlatformWindow
+    x:Class="RevitCopingZones.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+
+    xmlns:base="clr-namespace:dosymep.WPF.Views"
+    xmlns:local="clr-namespace:RevitCopingZones.Views"
+    xmlns:vms="clr-namespace:RevitCopingZones.ViewModels"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:commands="clr-namespace:RevitCopingZones.Commands"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+
+    mc:Ignorable="d"
+    WindowStartupLocation="CenterOwner"
+
+    Title="MainWindow"
+    Height="450" Width="800"
+
+    x:Name="_this"
+    d:DataContext="{d:DesignInstance vms:MainViewModel, IsDesignTimeCreatable=False}">
+
+    <Window.Resources>
+        <commands:HideUnHideWindowCommand x:Key="_hideUnHideCommand" />
+        
+        <dxmvvm:BooleanToObjectConverter x:Key="HasNotConverter">
+            <dxmvvm:BooleanToObjectConverter.TrueValue>
+                <system:String>Есть</system:String>
+            </dxmvvm:BooleanToObjectConverter.TrueValue>
+            <dxmvvm:BooleanToObjectConverter.FalseValue>
+                <system:String>Нет</system:String>
+            </dxmvvm:BooleanToObjectConverter.FalseValue>
+        </dxmvvm:BooleanToObjectConverter>
+        
+        <dxmvvm:BooleanToObjectConverter x:Key="PermitConverter">
+            <dxmvvm:BooleanToObjectConverter.TrueValue>
+                <system:String>Разрешено</system:String>
+            </dxmvvm:BooleanToObjectConverter.TrueValue>
+            <dxmvvm:BooleanToObjectConverter.FalseValue>
+                <system:String>Запрещено</system:String>
+            </dxmvvm:BooleanToObjectConverter.FalseValue>
+        </dxmvvm:BooleanToObjectConverter>
+    </Window.Resources>
+
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand
+            EventName="Loaded"
+            Command="{Binding LoadViewCommand}" />
+
+        <dxmvvm:CompositeCommandBehavior x:Name="MultiCommand">
+            <dxmvvm:CommandItem
+                Command="{StaticResource _hideUnHideCommand}"
+                CommandParameter="{Binding ElementName=_this}" />
+
+            <dxmvvm:CommandItem
+                Command="{Binding SelectAreasCommand}" />
+
+            <dxmvvm:CommandItem
+                Command="{StaticResource _hideUnHideCommand}"
+                CommandParameter="{Binding ElementName=_this}" />
+        </dxmvvm:CompositeCommandBehavior>
+    </dxmvvm:Interaction.Behaviors>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel
+            Grid.Row="0"
+            Margin="0 10">
+            <dx:SimpleButton
+                Margin="5 0"
+                DockPanel.Dock="Right"
+                Content="Выбрать зоны"
+                Glyph="{dx:DXImage 'Office2013/Actions/SelectAll_32x32.png'}"
+                Command="{Binding CompositeCommand, ElementName=MultiCommand}" />
+
+            <dxe:TextEdit
+                IsReadOnly="True"
+                NullText="Выберите зоны на плане"
+                Text="{Binding CountOfAreas}" />
+        </DockPanel>
+
+        <dxg:GridControl
+            Grid.Row="1"
+            ItemsSource="{Binding FloorPlans}"
+            SelectedItem="{Binding FloorPlan}">
+            <dxg:GridControl.View>
+                <dxg:TableView
+                    AutoWidth="True"
+                    ShowGroupPanel="False"
+                    ShowTotalSummary="False"
+                    AllowEditing="False"
+                    AllowGrouping="False"
+                    EnableImmediatePosting="True" />
+            </dxg:GridControl.View>
+
+            <dxg:GridColumn
+                FieldName="IsSelected"
+                Header=""
+                AllowEditing="True"
+                AllowMoving="False"
+                AllowResizing="False"
+                AllowSorting="False"
+                AllowGrouping="False"
+                AllowAutoFilter="False"
+                AllowColumnFiltering="False"
+                Width="43"
+                MinWidth="43"
+                MaxWidth="43"
+                ShowCheckBoxInHeader="True">
+
+                <dxg:GridColumn.CellTemplate>
+                    <DataTemplate DataType="{x:Type dxg:RowData}">
+                        <dxe:CheckEdit
+                            Name="PART_Editor"
+                            IsReadOnly="True"
+                            IsChecked="{Binding Row.IsSelected, 
+                                UpdateSourceTrigger=PropertyChanged}"
+                            IsEnabled="{Binding Row.CanCopyAreas}" />
+                    </DataTemplate>
+                </dxg:GridColumn.CellTemplate>
+            </dxg:GridColumn>
+
+            <dxg:GridColumn FieldName="FloorName" Header="Этаж" />
+            
+            <dxg:GridColumn
+                Header="План зонирования"
+                Binding="{Binding HasViewPlan, 
+                    Converter={StaticResource HasNotConverter}}"/>
+            
+            <dxg:GridColumn
+                Header="Зоны на плане зонирования"
+                Binding="{Binding HasAreasInPlan, 
+                    Converter={StaticResource HasNotConverter}}" />
+        </dxg:GridControl>
+
+        <StackPanel
+            Grid.Row="2"
+            Height="45"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right">
+            <TextBlock
+                Margin="10"
+                Foreground="Orange"
+                VerticalAlignment="Center"
+                Text="{Binding ErrorText}" />
+
+            <dx:SimpleButton
+                Margin="10"
+                Width="80"
+                Content="ОК"
+                Click="ButtonOk_Click"
+                Command="{Binding ExecuteViewCommand}" />
+
+            <dx:SimpleButton
+                Margin="10"
+                Width="80"
+                Content="Отмена"
+                IsCancel="True"
+                Click="ButtonCancel_Click" />
+        </StackPanel>
+    </Grid>
+</base:ThemedPlatformWindow>
