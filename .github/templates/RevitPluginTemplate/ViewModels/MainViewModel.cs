@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 
+using dosymep.SimpleServices;
 using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
 
@@ -9,16 +10,22 @@ namespace RevitPluginTemplate.ViewModels {
     internal class MainViewModel : BaseViewModel {
         private readonly PluginConfig _pluginConfig;
         private readonly RevitRepository _revitRepository;
+        private readonly ILocalizationService _localizationService;
 
         private string _errorText;
         private string _saveProperty;
 
-        public MainViewModel(PluginConfig pluginConfig, RevitRepository revitRepository) {
+        public MainViewModel(
+            PluginConfig pluginConfig, 
+            RevitRepository revitRepository, 
+            ILocalizationService localizationService) {
+            
             _pluginConfig = pluginConfig;
             _revitRepository = revitRepository;
+            _localizationService = localizationService;
 
             LoadViewCommand = RelayCommand.Create(LoadView);
-            AcceptViewCommand = RelayCommand.Create(AcceptView);
+            AcceptViewCommand = RelayCommand.Create(AcceptView, CanAcceptView);
         }
 
         public ICommand LoadViewCommand { get; }
@@ -41,11 +48,21 @@ namespace RevitPluginTemplate.ViewModels {
         private void AcceptView() {
             SaveConfig();
         }
+        
+        private bool CanAcceptView() {
+            if(string.IsNullOrEmpty(SaveProperty)) {
+                ErrorText =  _localizationService.GetLocalizedString("MainWindow.HelloCheck");
+                return false;
+            }
+
+            ErrorText = null;
+            return true;
+        }
 
         private void LoadConfig() {
             RevitSettings setting = _pluginConfig.GetSettings(_revitRepository.Document);
 
-            SaveProperty = setting?.SaveProperty ?? "Привет Revit!";
+            SaveProperty = setting?.SaveProperty ?? _localizationService.GetLocalizedString("MainWindow.Hello");
         }
 
         private void SaveConfig() {
