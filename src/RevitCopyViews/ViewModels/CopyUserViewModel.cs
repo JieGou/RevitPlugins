@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -53,7 +53,7 @@ namespace RevitCopyViews.ViewModels {
         public ICommand CopyUserCommand { get; }
 
         private void CopyUser(object p) {
-            using(var transaction = Document.StartTransaction("Копирование видов")) {
+            using(var transaction = Document.StartTransaction("Copying views")) {
                 foreach(View revitView in Views) {
                     View newView = (View) Document.GetElement(revitView.Duplicate(ViewDuplicateOption.Duplicate));
 

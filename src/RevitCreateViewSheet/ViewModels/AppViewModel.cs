@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -107,7 +107,7 @@ namespace RevitCreateViewSheet.ViewModels {
             int lastIndex = _revitRepository.GetLastViewSheetIndex(AlbumBlueprints);
             lastIndex++;
             using(var transaction = new Transaction(_revitRepository.Document)) {
-                transaction.Start("Создание видов");
+                transaction.Start("Creating Species");
 
                 foreach(var viewSheetViewModel in ViewSheets) {
                     ViewSheet viewSheet = _revitRepository.CreateViewSheet(viewSheetViewModel.FamilySymbol);

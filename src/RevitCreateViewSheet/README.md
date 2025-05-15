@@ -1,13 +1,13 @@
-# RevitCreateViewSheet (Управление листами)
-Плагин создает листы с выбранными форматами.
+# RevitCreateViewSheet (Sheet Management)
+The plugin creates sheets with the selected formats.
 
-## Сборка проекта
+## Assembling the project
 
 ```
 nuke compile --profile RevitCreateViewSheet
 ```
 
-## Публикация проекта
+## Publication of the project
 
 ```
 nuke publish --profile RevitCreateViewSheet

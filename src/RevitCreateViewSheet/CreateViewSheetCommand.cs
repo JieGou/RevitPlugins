@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace RevitCreateViewSheet {
     [Transaction(TransactionMode.Manual)]
     public class CreateViewSheetCommand : BasePluginCommand {
         public CreateViewSheetCommand() {
-            PluginName = "Менеджер листов";
+            PluginName = "图纸管理器";
         }
 
         protected override void Execute(UIApplication uiApplication) {

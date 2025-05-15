@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -155,9 +155,9 @@ namespace RevitCopyViews.ViewModels {
                     View newView = (View) Document.GetElement(revitView.Duplicate(copyOption));
                     newView.Name = GetViewName(revitView);
 
-                    // У некоторых видов установлен шаблон,
-                    // у которого заблокировано редактирование атрибута ProjectParamsConfig.Instance.ViewGroup
-                    // удаление шаблона разрешает изменение данного атрибута
+                    // Some views have a template installed,
+                    // which has the ProjectParamsConfig.Instance.ViewGroup attribute blocked from editing
+                    // deleting the template allows this attribute to be changed
                     newView.ViewTemplateId = ElementId.InvalidElementId;
                     newView.SetParamValue(ProjectParamsConfig.Instance.ViewGroup, GroupView);
                 }

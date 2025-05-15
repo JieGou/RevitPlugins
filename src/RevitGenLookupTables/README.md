@@ -1,5 +1,5 @@
 # RevitGenLookupTables (Генерация таблиц выбора)
-Плагин генерирует таблицы выбора, позволяет выбирать параметры и указывать список возможных значений.
+The plugin generates selection tables, allows you to select parameters and specify a list of possible values.
 
 ## Сборка проекта
 ```

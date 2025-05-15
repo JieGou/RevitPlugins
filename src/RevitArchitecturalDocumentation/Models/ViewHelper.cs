@@ -169,25 +169,25 @@ namespace RevitArchitecturalDocumentation.Models {
 
 
         /// <summary>
-        /// Размещает вид на листе
+        /// Places a view on a sheet
         /// </summary>
         public Viewport PlaceViewportOnSheet(ViewSheet viewSheet, ElementType viewportType) {
 
-            // Если переданный лист или вид is null или вид.экран вида нельзя добавить на лист, то возвращаем null
+            // If the passed sheet or view is null or the view.screen of the view cannot be added to the sheet, then return null
             if(viewSheet is null) {
-                Report?.AddNodeWithName($"❗ Произошла ошибка при размещении вида! Лист для размещения не найден!");
+                Report?.AddNodeWithName($"❗ An error occurred while placing the view! The listing sheet was not found!");
                 return null;
             }
             if(View is null) {
-                Report?.AddNodeWithName($"❗ Произошла ошибка при размещении вида! Вид для размещения не найден!");
+                Report?.AddNodeWithName($"❗ An error occurred while posting the view! The view for posting was not found!");
                 return null;
             }
             if(!Viewport.CanAddViewToSheet(Repository.Document, viewSheet.Id, View.Id)) {
-                Report?.AddNodeWithName($"❗ Произошла ошибка при размещении вида! Нельзя разместить вид на листе!");
+                Report?.AddNodeWithName($"❗ An error occurred while placing the view! The view cannot be placed on the sheet!");
                 return null;
             }
 
-            // Размещаем план на листе в начальной точке, чтобы оценить габариты
+            // Place the plan on the sheet at the starting point to estimate the dimensions
             Viewport viewPort = Viewport.Create(Repository.Document, viewSheet.Id, View.Id, new XYZ(0, 0, 0));
             if(viewPort is null) {
                 Report?.AddNodeWithName($"❗ Не удалось создать вид на листе!");
@@ -212,13 +212,13 @@ namespace RevitArchitecturalDocumentation.Models {
                 .FirstOrDefault() as FamilyInstance;
 
             if(titleBlock is null) {
-                Report?.AddNodeWithName($"❗ Не удалось найти рамку листа, она нужна для правильного расположения вида на листе!");
+                Report?.AddNodeWithName($"❗ Could not find the sheet frame, it is needed for the correct positioning of the view on the sheet!");
                 return null;
             }
 
             Repository.Document.Regenerate();
 
-            // Получение габаритов рамки листа
+            // Getting the dimensions of the sheet frame
             BoundingBoxXYZ boundingBoxXYZ = titleBlock.get_BoundingBox(viewSheet);
             double titleBlockWidth = boundingBoxXYZ.Max.X - boundingBoxXYZ.Min.X;
             double titleBlockHeight = boundingBoxXYZ.Max.Y - boundingBoxXYZ.Min.Y;
@@ -232,11 +232,11 @@ namespace RevitArchitecturalDocumentation.Models {
                 0);
 
             viewPort.SetBoxCenter(correctPosition);
-            Report?.AddNodeWithName($"Вид успешно спозиционирован на листе!");
+            Report?.AddNodeWithName($"The view has been successfully positioned on the sheet!");
 
 #if REVIT_2022_OR_GREATER
             viewPort.LabelOffset = new XYZ(viewportHalfWidth * 0.9, viewportHalfHeight * 2, 0);
-            Report?.AddNodeWithName($"Оглавление вида успешно спозиционировано на листе!");
+            Report?.AddNodeWithName($"The view table of contents has been successfully positioned on the sheet!");
 #endif
             return viewPort;
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -107,11 +107,11 @@ namespace dosymep.Bim4Everyone {
         protected void Notification(bool? dialogResult) {
             if(dialogResult == null) {
                 GetPlatformService<INotificationService>()
-                    .CreateNotification(PluginName, "Выход из скрипта.", "C#")
+                    .CreateNotification(PluginName, "退出脚本。", "C#")
                     .ShowAsync();
             } else if(dialogResult == true) {
                 GetPlatformService<INotificationService>()
-                    .CreateNotification(PluginName, "Выполнение скрипта завершено успешно.", "C#")
+                    .CreateNotification(PluginName, "脚本执行成功完成。", "C#")
                     .ShowAsync();
             } else if(dialogResult == false) {
                 throw new OperationCanceledException();
